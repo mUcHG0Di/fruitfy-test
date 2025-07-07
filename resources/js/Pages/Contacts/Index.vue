@@ -1,13 +1,16 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import Pagination from '../../Components/Pagination.vue';
 import { router } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { onMounted, watch } from 'vue';
 
 const props = defineProps({
   contacts: Object,
 });
+
+const page = usePage();
 
 const confirmDelete = (id) => {
   Swal.fire({
@@ -24,6 +27,20 @@ const confirmDelete = (id) => {
     }
   });
 };
+
+onMounted(() => {
+  if (page.props.flash && (page.props.flash.success || page.props.flash.error)) {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      icon: page.props.flash.success ? 'success' : 'error',
+      title: page.props.flash.success ?? page.props.flash.error ?? 'Data updated', // A default message to not look weird
+    });
+  }
+});
 </script>
 
 <template>
@@ -47,10 +64,7 @@ const confirmDelete = (id) => {
           </Link>
         </div>
 
-        <div v-if="$page.props.flash && $page.props.flash.success" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-md shadow-sm" role="alert">
-          <p class="font-bold">Success</p>
-          <p>{{ $page.props.flash.success }}</p>
-        </div>
+
 
         <div class="bg-white shadow-2xl rounded-lg overflow-hidden">
           <table class="min-w-full leading-normal">
