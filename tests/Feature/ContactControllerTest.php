@@ -2,14 +2,11 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-class CreateContactsTest extends TestCase
+class ContactControllerTest extends TestCase
 {
-    use RefreshDatabase;
 
     #[Test]
     public function it_should_be_able_to_create_a_new_contact(): void

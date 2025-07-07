@@ -3,9 +3,18 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ContactRequest extends FormRequest
+class UpdateContactRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,7 +34,7 @@ class ContactRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                'unique:contacts'
+                Rule::unique('contacts')->ignore($this->id),
             ],
             'phone' => [
                 'required',

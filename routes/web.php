@@ -7,4 +7,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/contacts', ContactController::class);
+Route::resource('/contacts', ContactController::class)
+    ->except([
+        'create',
+        'edit',
+    ]);
