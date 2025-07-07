@@ -29,6 +29,10 @@ class ContactController extends Controller
     public function store(ContactRequest $contactsRequest)
     {
         $data = $contactsRequest->validated();
+
+        Contact::create($data);
+
+        return view('contacts.index');
     }
 
     /**
