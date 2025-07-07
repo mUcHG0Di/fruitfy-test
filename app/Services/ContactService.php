@@ -39,12 +39,11 @@ final class ContactService implements ContactServiceInterface
         return new ContactResource(Contact::findOrFail($id));
     }
 
-    public function updateContact(int $id, array $data): ContactResource
+    public function updateContact(int $id, array $data): bool
     {
         $contact = Contact::findOrFail($id);
-        $contact->update($data);
 
-        return new ContactResource($contact);
+        return $contact->update($data);
     }
 
     public function deleteContact(int $id): bool

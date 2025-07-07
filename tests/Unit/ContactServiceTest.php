@@ -24,7 +24,7 @@ class ContactServiceTest extends TestCase
     public function it_can_get_contacts(): void
     {
         $contacts = Contact::factory(10)->create();
-        $result = $this->contactService->getContacts();
+        $result = $this->contactService->listContacts();
 
         $this->assertInstanceOf(ContactResourceCollection::class, $result);
         $this->assertEquals($contacts->count(), $result->count());
@@ -52,7 +52,11 @@ class ContactServiceTest extends TestCase
         $contact = Contact::factory()->create();
         $updateData = ['name' => 'Updated Name'];
 
-        $updatedContact = $this->contactService->updateContact($contact->id, $updateData);
+        $result = $this->contactService->updateContact($contact->id, $updateData);
+
+        $this->assertTrue($result);
+        
+        $updatedContact = Contact::findOrFail($contact->id);
 
         $this->assertEquals('Updated Name', $updatedContact->name);
     }
