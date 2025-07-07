@@ -1,10 +1,28 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
 import Pagination from '../../Components/Pagination.vue';
+import { router } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   contacts: Object,
 });
+
+const confirmDelete = (id) => {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#4F46E5',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      router.delete(route('contacts.destroy', id));
+    }
+  });
+};
 </script>
 
 <template>
@@ -58,9 +76,9 @@ const props = defineProps({
                   <Link :href="route('contacts.edit', contact.id)" class="text-gray-500 hover:text-yellow-600" title="Edit">
                     <i class="mdi mdi-pencil text-xl"></i>
                   </Link>
-                  <Link :href="route('contacts.destroy', contact.id)" method="delete" as="button" type="button" class="text-gray-500 hover:text-red-600" :onBefore="() => confirm('Are you sure you want to delete this contact?')" title="Delete">
+                                    <button @click="confirmDelete(contact.id)" type="button" class="text-gray-500 hover:text-red-600" title="Delete">
                     <i class="mdi mdi-delete text-xl"></i>
-                  </Link>
+                  </button>
                 </div>
               </td>
             </tr>
