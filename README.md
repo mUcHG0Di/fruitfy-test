@@ -18,8 +18,8 @@ Front-end Assessment: [ ] Implement a front-end using Inertia.js, Vue3 and Tailw
 8. Send the repository link to WhatsApp +55 41 98702-5814
 
 # Test notes
-Original fixes for backend assessment tests are in commit: 2ff995439de8a2aceb2dfb64f48c22e4a35fb5d9.
-(Final code has been updated to support inertia requests)
+Original fixes for backend assessment tests are in commit: [2ff995439de8a2aceb2dfb64f48c22e4a35fb5d9](https://github.com/mUcHG0Di/fruitfy-test/commit/2ff995439de8a2aceb2dfb64f48c22e4a35fb5d9).
+(Final code contains the tests updated with support for inertia requests)
 
 Some improvements I've made:
 - Add email notifications for deleted contacts
