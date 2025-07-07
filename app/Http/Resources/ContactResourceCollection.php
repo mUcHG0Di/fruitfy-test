@@ -9,11 +9,6 @@ class ContactResourceCollection extends ResourceCollection
 {
     public $resource = ContactResource::class;
 
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @return array<int|string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [
@@ -23,7 +18,15 @@ class ContactResourceCollection extends ResourceCollection
                 'last_page' => $this->lastPage(),
                 'per_page' => $this->perPage(),
                 'total' => $this->total(),
-            ]
+                'from' => $this->firstItem(),
+                'to' => $this->lastItem(),
+            ],
+            'links' => [
+                'first' => $this->url(1),
+                'last' => $this->url($this->lastPage()),
+                'prev' => $this->previousPageUrl(),
+                'next' => $this->nextPageUrl(),
+            ],
         ];
     }
 }

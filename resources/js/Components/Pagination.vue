@@ -7,6 +7,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  links: {
+    type: Object,
+    required: true,
+  },
 });
 
 const pageNumbers = computed(() => {
@@ -16,6 +20,12 @@ const pageNumbers = computed(() => {
   }
   return pages;
 });
+
+const getPageUrl = (page) => {
+  const url = new URL(props.links.first);
+  url.searchParams.set('page', page);
+  return url.toString();
+};
 </script>
 
 <template>
@@ -23,9 +33,9 @@ const pageNumbers = computed(() => {
     <nav class="flex items-center space-x-1">
       <!-- Previous Page Link -->
       <Link
-        :href="pagination.current_page > 1 ? route(route().current(), { page: pagination.current_page - 1 }) : '#!'"
-        :class="['px-4 py-2 text-sm font-medium border rounded-md', pagination.current_page > 1 ? 'text-gray-700 bg-white hover:bg-gray-50' : 'text-gray-400 bg-gray-50 cursor-not-allowed']"
-        :disabled="pagination.current_page <= 1"
+        :href="links.prev || '#!'"
+        :class="['px-4 py-2 text-sm font-medium border rounded-md', links.prev ? 'text-gray-700 bg-white hover:bg-gray-50' : 'text-gray-400 bg-gray-50 cursor-not-allowed']"
+        :disabled="!links.prev"
         as="button"
         type="button"
       >
@@ -35,7 +45,7 @@ const pageNumbers = computed(() => {
       <!-- Page Numbers -->
       <template v-for="page in pageNumbers" :key="page">
         <Link
-          :href="route(route().current(), { page: page })"
+          :href="getPageUrl(page)"
           :class="['px-4 py-2 text-sm font-medium border rounded-md', page === pagination.current_page ? 'text-white bg-indigo-600 border-indigo-600' : 'text-gray-700 bg-white hover:bg-gray-50']"
         >
           {{ page }}
@@ -44,9 +54,9 @@ const pageNumbers = computed(() => {
 
       <!-- Next Page Link -->
       <Link
-        :href="pagination.current_page < pagination.last_page ? route(route().current(), { page: pagination.current_page + 1 }) : '#!'"
-        :class="['px-4 py-2 text-sm font-medium border rounded-md', pagination.current_page < pagination.last_page ? 'text-gray-700 bg-white hover:bg-gray-50' : 'text-gray-400 bg-gray-50 cursor-not-allowed']"
-        :disabled="pagination.current_page >= pagination.last_page"
+        :href="links.next || '#!'"
+        :class="['px-4 py-2 text-sm font-medium border rounded-md', links.next ? 'text-gray-700 bg-white hover:bg-gray-50' : 'text-gray-400 bg-gray-50 cursor-not-allowed']"
+        :disabled="!links.next"
         as="button"
         type="button"
       >

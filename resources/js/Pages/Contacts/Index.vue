@@ -68,7 +68,7 @@ const confirmDelete = (id) => {
               <td class="px-6 py-4 whitespace-nowrap">
                 <p class="text-sm text-gray-500">{{ contact.phone }}</p>
               </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex items-center justify-end space-x-4">
                   <Link :href="route('contacts.show', contact.id)" class="text-gray-500 hover:text-indigo-600" title="View">
                     <i class="mdi mdi-eye text-xl"></i>
@@ -76,7 +76,7 @@ const confirmDelete = (id) => {
                   <Link :href="route('contacts.edit', contact.id)" class="text-gray-500 hover:text-yellow-600" title="Edit">
                     <i class="mdi mdi-pencil text-xl"></i>
                   </Link>
-                                    <button @click="confirmDelete(contact.id)" type="button" class="text-gray-500 hover:text-red-600" title="Delete">
+                    <button @click="confirmDelete(contact.id)" type="button" class="text-gray-500 hover:text-red-600" title="Delete">
                     <i class="mdi mdi-delete text-xl"></i>
                   </button>
                 </div>
@@ -91,8 +91,8 @@ const confirmDelete = (id) => {
         </table>
       </div>
 
-            <!-- Pagination -->
-      <Pagination :pagination="contacts.pagination" />
+      <!-- Pagination -->
+            <Pagination :pagination="contacts.pagination" :links="contacts.links" />
 
     </div>
   </div>
