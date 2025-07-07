@@ -16,3 +16,15 @@ Front-end Assessment: [ ] Implement a front-end using Inertia.js, Vue3 and Tailw
 
 7. After the test is complete, create a repository on github, and upload your resolution to the repository
 8. Send the repository link to WhatsApp +55 41 98702-5814
+
+# Test notes
+Original fixes for backend assessment tests are in commit: 2ff995439de8a2aceb2dfb64f48c22e4a35fb5d9.
+(Final code has been updated to support inertia requests)
+
+Some improvements I've made:
+- Add email notifications for deleted contacts
+- Added sweetalert library for delete confirmation and snackbars messages
+- Added authentication with laravel breeze
+- Added a command to update phone numbers that were factory created and contains special characters
+- Added a job to call the command created
+- Added a schedule to run the job daily at 6:00 AM
