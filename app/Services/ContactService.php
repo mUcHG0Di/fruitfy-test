@@ -13,21 +13,37 @@ final class ContactService implements ContactServiceInterface
 {
     public function getContacts(array $filters = []): ContactResourceCollection
     {
-        //
+        return new ContactResourceCollection(
+            Contact::paginate(
+                perPage: data_get($filters, 'per_page', 10),
+                page: data_get($filters, 'page', 1),
+                columns: [
+                    'id',
+                    'name',
+                    'email',
+                    'phone',
+                ]
+            )
+        );
     }
 
     public function storeContact(array $data): ContactResource
     {
-        //
+        $contact = Contact::create($data);
+
+        return new ContactResource($contact);
     }
 
     public function updateContact(int $id, array $data): ContactResource
     {
-        // 
+        $contact = Contact::findOrFail($id);
+        $contact->update($data);
+
+        return new ContactResource($contact);
     }
 
     public function deleteContact(int $id): bool
     {
-        //
+        return Contact::findOrFail($id)->delete();
     }
 }
