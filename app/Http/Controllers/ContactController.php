@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Contracts\Services\ContactServiceInterface;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use App\Http\Resources\ContactResource;
-use App\Models\Contact;
 
 class ContactController extends Controller
 {
@@ -21,7 +19,7 @@ class ContactController extends Controller
     public function index()
     {
         return inertia()->render('Contacts/Index', [
-            'contacts' => $this->contactService->getContacts(request()->all()),
+            'contacts' => $this->contactService->listContacts(request()->all()),
         ]);
     }
 
@@ -40,7 +38,8 @@ class ContactController extends Controller
     {
         $this->contactService->storeContact($request->validated());
 
-        return redirect()->route('contacts.index')
+        return redirect()
+            ->route('contacts.index')
             ->with('success', 'Contact created successfully.');
     }
 
@@ -50,7 +49,7 @@ class ContactController extends Controller
     public function show(string $id)
     {
         return inertia()->render('Contacts/Show', [
-            'contact' => new ContactResource(Contact::findOrFail($id)),
+            'contact' => $this->contactService->getContact($id),
         ]);
     }
 
@@ -60,7 +59,7 @@ class ContactController extends Controller
     public function edit(string $id)
     {
         return inertia()->render('Contacts/Edit', [
-            'contact' => new ContactResource(Contact::findOrFail($id)),
+            'contact' => $this->contactService->getContact($id),
         ]);
     }
 
@@ -71,7 +70,8 @@ class ContactController extends Controller
     {
         $this->contactService->updateContact((int) $id, $request->validated());
 
-        return redirect()->route('contacts.index')
+        return redirect()
+            ->route('contacts.index')
             ->with('success', 'Contact updated successfully.');
     }
 
@@ -82,6 +82,8 @@ class ContactController extends Controller
     {
         $this->contactService->deleteContact((int) $id);
 
-        return redirect()->back()->with('success', 'Contact deleted successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'Contact deleted successfully.');
     }
 }

@@ -11,7 +11,7 @@ use App\Models\Contact;
 
 final class ContactService implements ContactServiceInterface
 {
-    public function getContacts(array $filters = []): ContactResourceCollection
+    public function listContacts(array $filters = []): ContactResourceCollection
     {
         return new ContactResourceCollection(
             Contact::paginate(
@@ -32,6 +32,11 @@ final class ContactService implements ContactServiceInterface
         $contact = Contact::create($data);
 
         return new ContactResource($contact);
+    }
+
+    public function getContact(int $id): ContactResource
+    {
+        return new ContactResource(Contact::findOrFail($id));
     }
 
     public function updateContact(int $id, array $data): ContactResource
