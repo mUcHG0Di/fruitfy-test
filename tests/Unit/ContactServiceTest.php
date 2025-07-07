@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Http\Resources\ContactResource;
 use App\Http\Resources\ContactResourceCollection;
 use App\Models\Contact;
+use App\Models\User;
 use App\Services\ContactService;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -18,6 +19,9 @@ class ContactServiceTest extends TestCase
         parent::setUp();
 
         $this->contactService = new ContactService();
+        $this->actingAs(
+            User::factory()->create()
+        );
     }
 
     #[Test]

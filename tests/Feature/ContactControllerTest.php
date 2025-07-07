@@ -2,11 +2,22 @@
 
 namespace Tests\Feature;
 
+use App\Models\Contact;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ContactControllerTest extends TestCase
 {
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(
+            User::factory()->create()
+        );
+    }
 
     #[Test]
     public function it_should_be_able_to_create_a_new_contact(): void
@@ -17,10 +28,8 @@ class ContactControllerTest extends TestCase
             'phone' => '(41) 98899-4422'
         ];
 
-        $response = $this->post('/contacts', $data);
-
-        $response->assertStatus(200);
-
+        $this->post('/contacts', $data)
+            ->assertRedirectToRoute('contacts.index');
 
         $expected = $data;
         $expected['phone'] = preg_replace('/\D/', '', $expected['phone']);
@@ -51,29 +60,26 @@ class ContactControllerTest extends TestCase
     #[Test]
     public function it_should_be_able_to_list_contacts_paginated_by_10_items_per_page(): void
     {
-        \App\Models\Contact::factory(20)->create();
+        Contact::factory(20)->create();
 
-        $response = $this->get('/contacts');
-
-        $response->assertStatus(200);
-
-        $response->assertViewIs('contacts.index');
-
-        $response->assertViewHas('contacts');
-
-        $contacts = $response->viewData('contacts');
-
-        $this->assertCount(10, $contacts);
+        $this->get('/contacts')
+            ->assertInertia(fn ($page) => 
+                $page->component('Contacts/Index')
+                    ->has('contacts.data', 10)
+                    ->has('contacts.links')
+                    ->where('contacts.pagination.current_page', 1)
+                    ->where('contacts.pagination.total', 20)
+                    ->where('contacts.pagination.per_page', 10)
+            );
     }
 
     #[Test]
     public function it_should_be_able_to_delete_a_contact(): void
     {
-        $contact = \App\Models\Contact::factory()->create();
+        $contact = Contact::factory()->create();
 
-        $response = $this->delete("/contacts/{$contact->id}");
-
-        $response->assertStatus(200);
+        $this->delete("/contacts/{$contact->id}")
+            ->assertRedirectToRoute('contacts.index');
 
         $this->assertDatabaseMissing('contacts', $contact->toArray());
     }
@@ -101,7 +107,7 @@ class ContactControllerTest extends TestCase
     #[Test]
     public function it_should_be_able_to_update_a_contact(): void
     {
-        $contact = \App\Models\Contact::factory()->create();
+        $contact = Contact::factory()->create();
 
         $data = [
             'name' => 'Rodolfo Meri',
@@ -109,12 +115,10 @@ class ContactControllerTest extends TestCase
             'phone' => '(41) 98899-4422'
         ];
 
-        $response = $this->put("/contacts/{$contact->id}", $data);
-
-        $response->assertStatus(200);
+        $this->put("/contacts/{$contact->id}", $data)
+            ->assertRedirectToRoute('contacts.index');
 
         $expected = $data;
-
         $expected['phone'] = preg_replace('/\D/', '', $expected['phone']);
 
         $this->assertDatabaseHas('contacts', $expected);

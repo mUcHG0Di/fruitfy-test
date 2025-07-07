@@ -29,6 +29,7 @@ const confirmDelete = (id) => {
 };
 
 onMounted(() => {
+  console.log(page.props.contacts);
   if (page.props.flash && (page.props.flash.success || page.props.flash.error)) {
     Swal.fire({
       toast: true,
@@ -44,7 +45,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Head title="Dashboard" />
+  <Head title="Contacts" />
 
   <AuthenticatedLayout>
     <template #header>

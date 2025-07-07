@@ -86,7 +86,7 @@ class ContactController extends Controller
         $result = $this->contactService->deleteContact($id);
 
         return redirect()
-            ->back()
+            ->route('contacts.index')
             ->with(
                 'success',
                 $result ? 'Contact deleted successfully.' : 'Contact not deleted.'
