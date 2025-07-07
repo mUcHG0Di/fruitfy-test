@@ -1,5 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import Pagination from '../../Components/Pagination.vue';
 
 const props = defineProps({
   contacts: Object,
@@ -11,7 +12,8 @@ const props = defineProps({
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-800">Contacts</h1>
-        <Link :href="route('contacts.create')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-150 ease-in-out">
+                <Link :href="route('contacts.create')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-150 ease-in-out flex items-center">
+          <i class="mdi mdi-plus-circle mr-2"></i>
           Create Contact
         </Link>
       </div>
@@ -62,7 +64,7 @@ const props = defineProps({
                 </div>
               </td>
             </tr>
-             <tr v-if="contacts.data.length === 0">
+            <tr v-if="contacts.data.length === 0">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">
                     No contacts found.
                 </td>
@@ -71,15 +73,8 @@ const props = defineProps({
         </table>
       </div>
 
-      <!-- Pagination -->
-      <div v-if="contacts.links.length > 3" class="mt-6 flex justify-center">
-        <div class="flex flex-wrap -mb-1">
-          <template v-for="(link, key) in contacts.links">
-            <div v-if="link.url === null" :key="key" class="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded" v-html="link.label" />
-            <Link v-else :key="`link-${key}`" class="mr-1 mb-1 px-4 py-3 text-sm leading-4 border rounded hover:bg-white focus:border-indigo-500 focus:text-indigo-500" :class="{ 'bg-white': link.active }" :href="link.url" v-html="link.label" />
-          </template>
-        </div>
-      </div>
+            <!-- Pagination -->
+      <Pagination :pagination="contacts.pagination" />
 
     </div>
   </div>

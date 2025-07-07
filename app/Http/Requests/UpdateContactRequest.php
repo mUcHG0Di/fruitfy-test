@@ -34,7 +34,7 @@ class UpdateContactRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('contacts')->ignore($this->id),
+                Rule::unique('contacts')->ignore($this->contact)
             ],
             'phone' => [
                 'required',
