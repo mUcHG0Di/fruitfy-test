@@ -2,24 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Services\ContactServiceInterface;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use App\Contracts\Services\ContactServiceInterface;
+use App\Http\Resources\ContactResource;
+use App\Models\Contact;
 
 class ContactController extends Controller
 {
     public function __construct(
-        private ContactServiceInterface $contactService
-    ) {}
+        private readonly ContactServiceInterface $contactService
+    ) {
+    }
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $contacts = $this->contactService->getContacts(request()->all());
-
-        return view('contacts.index', compact('contacts'));
+        return inertia()->render('Contacts/Index', [
+            'contacts' => $this->contactService->getContacts(request()->all()),
+        ]);
     }
 
     /**
@@ -27,18 +30,18 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return inertia()->render('Contacts/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreContactRequest $contactsRequest)
+    public function store(StoreContactRequest $request)
     {
-        $data = $contactsRequest->validated();
-        $contact = $this->contactService->storeContact($data);
+        $this->contactService->storeContact($request->validated());
 
-        return view('contacts.index', compact('contact'));
+        return redirect()->route('contacts.index')
+            ->with('success', 'Contact created successfully.');
     }
 
     /**
@@ -46,7 +49,9 @@ class ContactController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return inertia()->render('Contacts/Show', [
+            'contact' => new ContactResource(Contact::findOrFail($id)),
+        ]);
     }
 
     /**
@@ -54,7 +59,9 @@ class ContactController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return inertia()->render('Contacts/Edit', [
+            'contact' => new ContactResource(Contact::findOrFail($id)),
+        ]);
     }
 
     /**
@@ -62,10 +69,10 @@ class ContactController extends Controller
      */
     public function update(UpdateContactRequest $request, string $id)
     {
-        $data = $request->validated();
-        $contact = $this->contactService->updateContact($id, $data);
+        $this->contactService->updateContact((int) $id, $request->validated());
 
-        return view('contacts.index', compact('contact'));
+        return redirect()->route('contacts.index')
+            ->with('success', 'Contact updated successfully.');
     }
 
     /**
@@ -73,8 +80,8 @@ class ContactController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->contactService->deleteContact($id);
+        $this->contactService->deleteContact((int) $id);
 
-        return view('contacts.index');
+        return redirect()->back()->with('success', 'Contact deleted successfully.');
     }
 }
