@@ -15,8 +15,8 @@ final class ContactService implements ContactServiceInterface
     {
         return new ContactResourceCollection(
             Contact::paginate(
-                perPage: data_get($filters, 'per_page', 10),
-                page: data_get($filters, 'page', 1),
+                perPage: (int) data_get($filters, 'per_page', 10),
+                page: (int) data_get($filters, 'page', 1),
                 columns: [
                     'id',
                     'name',
